@@ -13,7 +13,7 @@ import ShoppingCart from './components/ShoppingCart';
 // const jsHacked = "javascript: alert('Hacked!');"
 //*** */
 interface Props{
-
+  
 }
 
 interface State{
@@ -24,10 +24,13 @@ interface State{
 
 
 // class App extends React.Component<Props, State> { //类组件写法
-   const App: React.FC= (props)=> {
+   const App: React.FC<Props>= (props)=> {
     const [count, setCount] = useState<number>(0) //[]第一个是变量名，第二是状态名
     const [robotGallery, setRobotGallery] = useState<any>([])
     const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>()
+    
+    
     useEffect(()=>{ //默认的副作用调用尽量避免 花费更多系统资源
       document.title = `点击${count}次`
     }, [count])
@@ -42,12 +45,18 @@ interface State{
     //async/await
     useEffect(()=>{
       const fetchData = async ()=>{
-      setLoading(true)
+      setLoading(true) //加载数据Loading处理
+      try{ //异常处理
       const responses = await fetch("https://jsonplaceholder.typicode.com/users")
       const data = await responses.json()
       setRobotGallery(data)
-      setLoading(false)
+    } catch(e){
+      if(e instanceof Error){
+        setError(e.message);
       }
+    } 
+    setLoading(false)
+  };
 
       fetchData()
     }, []) 
@@ -148,7 +157,6 @@ interface State{
         {/* <span>count: {this.state.count}</span> */} {/*类组件函数写法 函数式组件不再用this*/}
         <span>count: {count}</span> {/*函数式组件*/}
         <ShoppingCart />
-        
         {/* <div className = {styles.robotList}>
           {robots.map( (r) => (
             <Robot id = {r.id} email = {r.email} name = {r.name} />
@@ -159,6 +167,9 @@ interface State{
             <Robot id = {r.id} email = {r.email} name = {r.name} />
           ))}
         </div> */}
+
+        {/* error不等于空或不等于字符串 */}
+        {(!error || error !== "") && <div>网站出错: {error}</div>} 
         { !loading ?
           <div className = {styles.robotList}>
           {robotGallery.map( (r) => (
@@ -169,7 +180,7 @@ interface State{
         }
       </div>
     );
-  }
+  } 
   
 
 
