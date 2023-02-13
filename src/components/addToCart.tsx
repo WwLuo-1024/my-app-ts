@@ -23,3 +23,20 @@ export const withAddToCart = (ChildComponet: React.ComponentType<RobotProps>) =>
     }
 
 }
+
+export const useAddtoCart = () =>{ //自定义hook函数
+    const setState = useContext(appSetStateContext)
+    const addToCart = (id, name) =>{
+        if(setState){ //
+            setState(state =>{
+                return{
+                    ...state,
+                    shoppingCart:{
+                        items: [...state.shoppingCart.items, {id, name}]
+                    }
+                }
+            })
+        }
+     }
+    return addToCart; //返回的不再是函数 而是这个业务逻辑本身
+}

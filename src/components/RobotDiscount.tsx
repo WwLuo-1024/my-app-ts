@@ -2,13 +2,13 @@ import React, {useContext} from "react";
 import styles from './Robot.module.css'
 import {appContext} from "../AppState"
 import { appSetStateContext } from "../AppState";
-import { withAddToCart } from "./addToCart";
+import { useAddtoCart } from "./addToCart";
 
 interface RobotProps {
     id: number,
     name: string,
     email: string,
-    addToCart: (id, name) => void
+    
 }
 
 const RobotDiscount : React.FC<RobotProps> = (props) => {  //FC = functional component函数式组件 接受泛型参数
@@ -16,7 +16,7 @@ const RobotDiscount : React.FC<RobotProps> = (props) => {  //FC = functional com
      const id = props.id;
      const name = props.name;
      const email = props.email;
-     const addToCart = props.addToCart
+     const addToCart = useAddtoCart();
      const value = useContext(appContext)
      const setState = useContext(appSetStateContext)
 
@@ -46,4 +46,4 @@ const RobotDiscount : React.FC<RobotProps> = (props) => {  //FC = functional com
     )
 };
 
-export default withAddToCart(RobotDiscount);
+export default RobotDiscount;
